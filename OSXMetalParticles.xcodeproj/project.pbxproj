@@ -162,6 +162,7 @@
 					};
 					3EE448D01B2B857E003F8471 = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0830;
 					};
 				};
 			};
@@ -386,6 +387,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.flexmonkey.OSXMetalParticles;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -401,6 +403,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.flexmonkey.OSXMetalParticles;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

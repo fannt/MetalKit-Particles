@@ -13,20 +13,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBOutlet weak var window: NSWindow!
     
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
-        
-        window.styleMask =  NSClosableWindowMask | NSTitledWindowMask | NSMiniaturizableWindowMask
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        window.styleMask = [.closable, .titled, .miniaturizable]
+
         window.setContentSize(NSSize(width: 1024, height: 768))
         window.showsResizeIndicator = false
         window.center()
         window.title = "OS X Metal Particles"
     }
 
-    func applicationWillTerminate(aNotification: NSNotification) {
+    func applicationWillTerminate(_ aNotification: Notification) {
         
     }
     
-    func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true;
     }
     

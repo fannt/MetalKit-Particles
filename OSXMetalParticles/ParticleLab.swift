@@ -27,41 +27,41 @@ class ParticleLab: MTKView
     let imageWidth: UInt
     let imageHeight: UInt
     
-    private var imageWidthFloatBuffer: MTLBuffer!
-    private var imageHeightFloatBuffer: MTLBuffer!
+    fileprivate var imageWidthFloatBuffer: MTLBuffer!
+    fileprivate var imageHeightFloatBuffer: MTLBuffer!
     
     let bytesPerRow: Int
     let region: MTLRegion
     let blankBitmapRawData : [UInt8]
     
-    private var kernelFunction: MTLFunction!
-    private var pipelineState: MTLComputePipelineState!
-    private var defaultLibrary: MTLLibrary! = nil
-    private var commandQueue: MTLCommandQueue! = nil
+    fileprivate var kernelFunction: MTLFunction!
+    fileprivate var pipelineState: MTLComputePipelineState!
+    fileprivate var defaultLibrary: MTLLibrary! = nil
+    fileprivate var commandQueue: MTLCommandQueue! = nil
     
-    private var errorFlag:Bool = false
+    fileprivate var errorFlag:Bool = false
     
-    private var threadsPerThreadgroup:MTLSize!
-    private var threadgroupsPerGrid:MTLSize!
+    fileprivate var threadsPerThreadgroup:MTLSize!
+    fileprivate var threadgroupsPerGrid:MTLSize!
     
     let particleCount: Int
     let alignment:Int = 0x4000
     let particlesMemoryByteSize:Int
     
-    private var particlesMemory:UnsafeMutablePointer<Void> = nil
-    private var particlesVoidPtr: COpaquePointer!
-    private var particlesParticlePtr: UnsafeMutablePointer<Particle>!
-    private var particlesParticleBufferPtr: UnsafeMutableBufferPointer<Particle>!
+    fileprivate var particlesMemory:UnsafeMutableRawPointer? = nil
+    fileprivate var particlesVoidPtr: OpaquePointer!
+    fileprivate var particlesParticlePtr: UnsafeMutablePointer<Particle>!
+    fileprivate var particlesParticleBufferPtr: UnsafeMutableBufferPointer<Particle>!
     
-    private var gravityWellParticle = Particle(A: Vector4(x: 0, y: 0, z: 0, w: 0),
+    fileprivate var gravityWellParticle = Particle(A: Vector4(x: 0, y: 0, z: 0, w: 0),
         B: Vector4(x: 0, y: 0, z: 0, w: 0),
         C: Vector4(x: 0, y: 0, z: 0, w: 0),
         D: Vector4(x: 0, y: 0, z: 0, w: 0))
     
-    let particleSize = sizeof(Particle)
-    let particleColorSize = sizeof(ParticleColor)
-    let boolSize = sizeof(Bool)
-    let floatSize = sizeof(Float)
+    let particleSize = MemoryLayout<Particle>.size
+    let particleColorSize = MemoryLayout<ParticleColor>.size
+    let boolSize = MemoryLayout<Bool>.size
+    let floatSize = MemoryLayout<Float>.size
     
     weak var particleLabDelegate: ParticleLabDelegate?
     
@@ -70,8 +70,8 @@ class ParticleLab: MTKView
     var respawnOutOfBoundsParticles = true
     var clearOnStep = true
     
-    private var frameStartTime: CFAbsoluteTime!
-    private var frameNumber = 0
+    fileprivate var frameStartTime: CFAbsoluteTime!
+    fileprivate var frameNumber = 0
     
     var particlesBufferNoCopy: MTLBuffer!
     
@@ -85,13 +85,13 @@ class ParticleLab: MTKView
         bytesPerRow = Int(4 * imageWidth)
         
         region = MTLRegionMake2D(0, 0, Int(imageWidth), Int(imageHeight))
-        blankBitmapRawData = [UInt8](count: Int(imageWidth * imageHeight * 4), repeatedValue: 0)
-        particlesMemoryByteSize = particleCount * sizeof(Particle)
+        blankBitmapRawData = [UInt8](repeating: 0, count: Int(imageWidth * imageHeight * 4))
+        particlesMemoryByteSize = particleCount * MemoryLayout<Particle>.size
         
         super.init(frame: CGRect(x: 0, y: 0, width: Int(width), height: Int(height)), device:  MTLCreateSystemDefaultDevice())
         
         framebufferOnly = false
-        colorPixelFormat = MTLPixelFormat.BGRA8Unorm
+        colorPixelFormat = MTLPixelFormat.bgra8Unorm
         sampleCount = 1
         preferredFramesPerSecond = 60
         
@@ -101,7 +101,7 @@ class ParticleLab: MTKView
         
         setUpMetal()
         
-        particlesBufferNoCopy = device!.newBufferWithBytesNoCopy(particlesMemory, length: Int(particlesMemoryByteSize), options: MTLResourceOptions.StorageModeShared, deallocator: nil)
+        particlesBufferNoCopy = device!.makeBuffer(bytesNoCopy: particlesMemory!, length: Int(particlesMemoryByteSize), options: MTLResourceOptions(), deallocator: nil)
     }
     
     required init(coder aDecoder: NSCoder)
@@ -114,11 +114,11 @@ class ParticleLab: MTKView
         free(particlesMemory)
     }
     
-    private func setUpParticles()
+    fileprivate func setUpParticles()
     {
         posix_memalign(&particlesMemory, alignment, particlesMemoryByteSize)
         
-        particlesVoidPtr = COpaquePointer(particlesMemory)
+        particlesVoidPtr = OpaquePointer(particlesMemory)
         particlesParticlePtr = UnsafeMutablePointer<Particle>(particlesVoidPtr)
         particlesParticleBufferPtr = UnsafeMutableBufferPointer(start: particlesParticlePtr, count: particleCount)
         
@@ -128,13 +128,13 @@ class ParticleLab: MTKView
     
     func resetGravityWells()
     {
-        setGravityWellProperties(gravityWell: .One, normalisedPositionX: 0.25, normalisedPositionY: 0.75, mass: 10, spin: 0.2)
-        setGravityWellProperties(gravityWell: .Two, normalisedPositionX: 0.25, normalisedPositionY: 0.25, mass: 10, spin: -0.2)
-        setGravityWellProperties(gravityWell: .Three, normalisedPositionX: 0.75, normalisedPositionY: 0.25, mass: 10, spin: 0.2)
-        setGravityWellProperties(gravityWell: .Four, normalisedPositionX: 0.75, normalisedPositionY: 0.75, mass: 10, spin: -0.2)
+        setGravityWellProperties(gravityWell: .one, normalisedPositionX: 0.25, normalisedPositionY: 0.75, mass: 10, spin: 0.2)
+        setGravityWellProperties(gravityWell: .two, normalisedPositionX: 0.25, normalisedPositionY: 0.25, mass: 10, spin: -0.2)
+        setGravityWellProperties(gravityWell: .three, normalisedPositionX: 0.75, normalisedPositionY: 0.25, mass: 10, spin: 0.2)
+        setGravityWellProperties(gravityWell: .four, normalisedPositionX: 0.75, normalisedPositionY: 0.75, mass: 10, spin: -0.2)
     }
     
-    func resetParticles(edgesOnly: Bool = false, distribution: Distribution = Distribution.Gaussian)
+    func resetParticles(_ edgesOnly: Bool = false, distribution: Distribution = Distribution.gaussian)
     {
         func rand() -> Float32
         {
@@ -151,11 +151,11 @@ class ParticleLab: MTKView
         
         switch distribution
         {
-        case .Gaussian:
+        case .gaussian:
             randomWidth = GKGaussianDistribution(randomSource: randomSource, lowestValue: 0, highestValue: Int(imageWidthDouble))
             randomHeight = GKGaussianDistribution(randomSource: randomSource, lowestValue: 0, highestValue: Int(imageHeightDouble))
             
-        case .Uniform:
+        case .uniform:
             randomWidth = GKShuffledDistribution(randomSource: randomSource, lowestValue: 0, highestValue: Int(imageWidthDouble))
             randomHeight = GKShuffledDistribution(randomSource: randomSource, lowestValue: 0, highestValue: Int(imageHeightDouble))
         }
@@ -218,12 +218,12 @@ class ParticleLab: MTKView
     }
     
 
-    override func drawRect(dirtyRect: CGRect)
+    override func draw(_ dirtyRect: CGRect)
     {
         step()
     }
     
-    private func setUpMetal()
+    fileprivate func setUpMetal()
     {
         guard let device = MTLCreateSystemDefaultDevice() else
         {
@@ -235,13 +235,13 @@ class ParticleLab: MTKView
         }
   
         defaultLibrary = device.newDefaultLibrary()
-        commandQueue = device.newCommandQueue()
+        commandQueue = device.makeCommandQueue()
         
-        kernelFunction = defaultLibrary.newFunctionWithName("particleRendererShader")
+        kernelFunction = defaultLibrary.makeFunction(name: "particleRendererShader")
         
         do
         {
-            try pipelineState = device.newComputePipelineStateWithFunction(kernelFunction!)
+            try pipelineState = device.makeComputePipelineState(function: kernelFunction!)
         }
         catch
         {
@@ -256,16 +256,16 @@ class ParticleLab: MTKView
         var imageWidthFloat = Float(imageWidth)
         var imageHeightFloat = Float(imageHeight)
         
-        imageWidthFloatBuffer =  device.newBufferWithBytes(&imageWidthFloat, length: sizeof(Float), options: MTLResourceOptions.CPUCacheModeDefaultCache)
+        imageWidthFloatBuffer =  device.makeBuffer(bytes: &imageWidthFloat, length: MemoryLayout<Float>.size, options: MTLResourceOptions())
         
-        imageHeightFloatBuffer = device.newBufferWithBytes(&imageHeightFloat, length: sizeof(Float), options: MTLResourceOptions.CPUCacheModeDefaultCache)
+        imageHeightFloatBuffer = device.makeBuffer(bytes: &imageHeightFloat, length: MemoryLayout<Float>.size, options: MTLResourceOptions())
         
         frameStartTime = CFAbsoluteTimeGetCurrent()
     }
     
-    final private func step()
+    final fileprivate func step()
     {
-        frameNumber++
+        frameNumber += 1
         
         if frameNumber == 100
         {
@@ -280,22 +280,22 @@ class ParticleLab: MTKView
             frameNumber = 0
         }
         
-        let commandBuffer = commandQueue.commandBuffer()
-        let commandEncoder = commandBuffer.computeCommandEncoder()
+        let commandBuffer = commandQueue.makeCommandBuffer()
+        let commandEncoder = commandBuffer.makeComputeCommandEncoder()
         
         commandEncoder.setComputePipelineState(pipelineState)
 
-        commandEncoder.setBuffer(particlesBufferNoCopy, offset: 0, atIndex: 0)
-        commandEncoder.setBuffer(particlesBufferNoCopy, offset: 0, atIndex: 1)
+        commandEncoder.setBuffer(particlesBufferNoCopy, offset: 0, at: 0)
+        commandEncoder.setBuffer(particlesBufferNoCopy, offset: 0, at: 1)
         
-        commandEncoder.setBytes(&gravityWellParticle, length: particleSize, atIndex: 2)
-        commandEncoder.setBytes(&particleColor, length: particleColorSize, atIndex: 3)
+        commandEncoder.setBytes(&gravityWellParticle, length: particleSize, at: 2)
+        commandEncoder.setBytes(&particleColor, length: particleColorSize, at: 3)
         
-        commandEncoder.setBuffer(imageWidthFloatBuffer, offset: 0, atIndex: 4)
-        commandEncoder.setBuffer(imageHeightFloatBuffer, offset: 0, atIndex: 5)
+        commandEncoder.setBuffer(imageWidthFloatBuffer, offset: 0, at: 4)
+        commandEncoder.setBuffer(imageHeightFloatBuffer, offset: 0, at: 5)
         
-        commandEncoder.setBytes(&dragFactor, length: floatSize, atIndex: 6)
-        commandEncoder.setBytes(&respawnOutOfBoundsParticles, length: boolSize, atIndex: 7)
+        commandEncoder.setBytes(&dragFactor, length: floatSize, at: 6)
+        commandEncoder.setBytes(&respawnOutOfBoundsParticles, length: boolSize, at: 7)
         
         guard let drawable = currentDrawable else
         {
@@ -306,20 +306,20 @@ class ParticleLab: MTKView
         
         if clearOnStep
         {
-            drawable.texture.replaceRegion(self.region, mipmapLevel: 0, withBytes: blankBitmapRawData, bytesPerRow: bytesPerRow)
+            drawable.texture.replace(region: self.region, mipmapLevel: 0, withBytes: blankBitmapRawData, bytesPerRow: bytesPerRow)
         }
         
-        commandEncoder.setTexture(drawable.texture, atIndex: 0)
+        commandEncoder.setTexture(drawable.texture, at: 0)
         
         commandEncoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
         
         commandEncoder.endEncoding()
 
-        commandBuffer.presentDrawable(drawable)
+        commandBuffer.present(drawable)
         
         commandBuffer.commit()
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0))
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async
         {
             self.particleLabDelegate?.particleLabDidUpdate()
         }
@@ -327,7 +327,7 @@ class ParticleLab: MTKView
     
 
     
-    final func getGravityWellNormalisedPosition(gravityWell gravityWell: GravityWell) -> (x: Float, y: Float)
+    final func getGravityWellNormalisedPosition(gravityWell: GravityWell) -> (x: Float, y: Float)
     {
         let returnPoint: (x: Float, y: Float)
         
@@ -336,66 +336,66 @@ class ParticleLab: MTKView
         
         switch gravityWell
         {
-        case .One:
+        case .one:
             returnPoint = (x: gravityWellParticle.A.x / imageWidthFloat, y: gravityWellParticle.A.y / imageHeightFloat)
             
-        case .Two:
+        case .two:
             returnPoint = (x: gravityWellParticle.B.x / imageWidthFloat, y: gravityWellParticle.B.y / imageHeightFloat)
             
-        case .Three:
+        case .three:
             returnPoint = (x: gravityWellParticle.C.x / imageWidthFloat, y: gravityWellParticle.C.y / imageHeightFloat)
             
-        case .Four:
+        case .four:
             returnPoint = (x: gravityWellParticle.D.x / imageWidthFloat, y: gravityWellParticle.D.y / imageHeightFloat)
         }
         
         return returnPoint
     }
     
-    final func setGravityWellProperties(gravityWellIndex gravityWellIndex: Int, normalisedPositionX: Float, normalisedPositionY: Float, mass: Float, spin: Float)
+    final func setGravityWellProperties(gravityWellIndex: Int, normalisedPositionX: Float, normalisedPositionY: Float, mass: Float, spin: Float)
     {
         switch gravityWellIndex
         {
         case 1:
-            setGravityWellProperties(gravityWell: .Two, normalisedPositionX: normalisedPositionX, normalisedPositionY: normalisedPositionY, mass: mass, spin: spin)
+            setGravityWellProperties(gravityWell: .two, normalisedPositionX: normalisedPositionX, normalisedPositionY: normalisedPositionY, mass: mass, spin: spin)
             
         case 2:
-            setGravityWellProperties(gravityWell: .Three, normalisedPositionX: normalisedPositionX, normalisedPositionY: normalisedPositionY, mass: mass, spin: spin)
+            setGravityWellProperties(gravityWell: .three, normalisedPositionX: normalisedPositionX, normalisedPositionY: normalisedPositionY, mass: mass, spin: spin)
             
         case 3:
-            setGravityWellProperties(gravityWell: .Four, normalisedPositionX: normalisedPositionX, normalisedPositionY: normalisedPositionY, mass: mass, spin: spin)
+            setGravityWellProperties(gravityWell: .four, normalisedPositionX: normalisedPositionX, normalisedPositionY: normalisedPositionY, mass: mass, spin: spin)
             
         default:
-            setGravityWellProperties(gravityWell: .One, normalisedPositionX: normalisedPositionX, normalisedPositionY: normalisedPositionY, mass: mass, spin: spin)
+            setGravityWellProperties(gravityWell: .one, normalisedPositionX: normalisedPositionX, normalisedPositionY: normalisedPositionY, mass: mass, spin: spin)
         }
     }
     
-    final func setGravityWellProperties(gravityWell gravityWell: GravityWell, normalisedPositionX: Float, normalisedPositionY: Float, mass: Float, spin: Float)
+    final func setGravityWellProperties(gravityWell: GravityWell, normalisedPositionX: Float, normalisedPositionY: Float, mass: Float, spin: Float)
     {
         let imageWidthFloat = Float(imageWidth)
         let imageHeightFloat = Float(imageHeight)
         
         switch gravityWell
         {
-        case .One:
+        case .one:
             gravityWellParticle.A.x = imageWidthFloat * normalisedPositionX
             gravityWellParticle.A.y = imageHeightFloat * normalisedPositionY
             gravityWellParticle.A.z = mass
             gravityWellParticle.A.w = spin
             
-        case .Two:
+        case .two:
             gravityWellParticle.B.x = imageWidthFloat * normalisedPositionX
             gravityWellParticle.B.y = imageHeightFloat * normalisedPositionY
             gravityWellParticle.B.z = mass
             gravityWellParticle.B.w = spin
             
-        case .Three:
+        case .three:
             gravityWellParticle.C.x = imageWidthFloat * normalisedPositionX
             gravityWellParticle.C.y = imageHeightFloat * normalisedPositionY
             gravityWellParticle.C.z = mass
             gravityWellParticle.C.w = spin
             
-        case .Four:
+        case .four:
             gravityWellParticle.D.x = imageWidthFloat * normalisedPositionX
             gravityWellParticle.D.y = imageHeightFloat * normalisedPositionY
             gravityWellParticle.D.z = mass
@@ -409,33 +409,33 @@ protocol ParticleLabDelegate: NSObjectProtocol
     func particleLabDidUpdate()
     func particleLabMetalUnavailable()
     
-    func particleLabStatisticsDidUpdate(fps fps: Int, description: String)
+    func particleLabStatisticsDidUpdate(fps: Int, description: String)
 }
 
 enum Distribution
 {
-    case Gaussian
-    case Uniform
+    case gaussian
+    case uniform
 }
 
 enum GravityWell
 {
-    case One
-    case Two
-    case Three
-    case Four
+    case one
+    case two
+    case three
+    case four
 }
 
 //  Since each Particle instance defines four particles, the visible particle count
 //  in the API is four times the number we need to create.
 enum ParticleCount: Int
 {
-    case HalfMillion = 131072
-    case OneMillion =  262144
-    case TwoMillion =  524288
-    case FourMillion = 1048576
-    case EightMillion = 2097152
-    case SixteenMillion = 4194304
+    case halfMillion = 131072
+    case oneMillion =  262144
+    case twoMillion =  524288
+    case fourMillion = 1048576
+    case eightMillion = 2097152
+    case sixteenMillion = 4194304
 }
 
 //  Paticles are split into three classes. The supplied particle color defines one

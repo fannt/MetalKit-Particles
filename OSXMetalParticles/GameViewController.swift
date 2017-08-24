@@ -13,7 +13,7 @@ class GameViewController : NSViewController, ParticleLabDelegate
 {
     var gravityWellAngle: Float = 0
     var particleLab: ParticleLab!
-    let floatPi = Float(M_PI)
+    let floatPi = Float(Double.pi)
     
     let fpsLabel = NSTextView(frame: NSRect(x: 0, y: 0, width: 200, height: 20))
     
@@ -21,7 +21,7 @@ class GameViewController : NSViewController, ParticleLabDelegate
     {        
         super.viewDidLoad()
         
-        particleLab = ParticleLab(width: 1024, height: 768, numParticles: ParticleCount.FourMillion)
+        particleLab = ParticleLab(width: 1024, height: 768, numParticles: ParticleCount.fourMillion)
         
         particleLab.dragFactor = 0.85
         particleLab.respawnOutOfBoundsParticles = true
@@ -30,8 +30,8 @@ class GameViewController : NSViewController, ParticleLabDelegate
         
         view.addSubview(particleLab)
         
-        fpsLabel.textColor = NSColor.whiteColor()
-        fpsLabel.editable = false
+        fpsLabel.textColor = NSColor.white
+        fpsLabel.isEditable = false
         fpsLabel.drawsBackground = false
         view.addSubview(fpsLabel)
     }
@@ -41,9 +41,9 @@ class GameViewController : NSViewController, ParticleLabDelegate
         // handle metal unavailable here
     }
     
-    func particleLabStatisticsDidUpdate(fps fps: Int, description: String)
+    func particleLabStatisticsDidUpdate(fps: Int, description: String)
     {
-        dispatch_async(dispatch_get_main_queue())
+        DispatchQueue.main.async
         {
             self.fpsLabel.string = description
         }
@@ -64,25 +64,25 @@ class GameViewController : NSViewController, ParticleLabDelegate
     {
         gravityWellAngle = gravityWellAngle + 0.02
         
-        particleLab.setGravityWellProperties(gravityWell: .One,
+        particleLab.setGravityWellProperties(gravityWell: .one,
             normalisedPositionX: 0.5 + 0.1 * sin(gravityWellAngle + floatPi * 0.5),
             normalisedPositionY: 0.5 + 0.1 * cos(gravityWellAngle + floatPi * 0.5),
             mass: 11 * sin(gravityWellAngle / 1.9),
             spin: 23 * cos(gravityWellAngle / 2.1))
         
-        particleLab.setGravityWellProperties(gravityWell: .Four,
+        particleLab.setGravityWellProperties(gravityWell: .four,
             normalisedPositionX: 0.5 + 0.1 * sin(gravityWellAngle + floatPi * 1.5),
             normalisedPositionY: 0.5 + 0.1 * cos(gravityWellAngle + floatPi * 1.5),
             mass: 11 * sin(gravityWellAngle / 1.9),
             spin: 23 * cos(gravityWellAngle / 2.1))
         
-        particleLab.setGravityWellProperties(gravityWell: .Two,
+        particleLab.setGravityWellProperties(gravityWell: .two,
             normalisedPositionX: 0.5 + (0.35 + sin(gravityWellAngle * 2.7)) * cos(gravityWellAngle / 1.3),
             normalisedPositionY: 0.5 + (0.35 + sin(gravityWellAngle * 2.7)) * sin(gravityWellAngle / 1.3),
             mass: 26 * cos(gravityWellAngle / 1.5),
             spin: -19 * sin(gravityWellAngle * 1.5))
         
-        particleLab.setGravityWellProperties(gravityWell: .Three,
+        particleLab.setGravityWellProperties(gravityWell: .three,
             normalisedPositionX: 0.5 + (0.35 + sin(gravityWellAngle * 2.7)) * cos(gravityWellAngle / 1.3 + floatPi),
             normalisedPositionY: 0.5 + (0.35 + sin(gravityWellAngle * 2.7)) * sin(gravityWellAngle / 1.3 + floatPi),
             mass: 26 * cos(gravityWellAngle / 1.5),
