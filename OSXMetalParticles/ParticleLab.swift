@@ -91,7 +91,7 @@ class ParticleLab: MTKView
         super.init(frame: CGRect(x: 0, y: 0, width: Int(width), height: Int(height)), device:  MTLCreateSystemDefaultDevice())
         
         framebufferOnly = false
-        colorPixelFormat = MTLPixelFormat.bgra8Unorm
+        colorPixelFormat = .bgra8Unorm
         sampleCount = 1
         preferredFramesPerSecond = 60
         
@@ -101,7 +101,7 @@ class ParticleLab: MTKView
         
         setUpMetal()
         
-        particlesBufferNoCopy = device!.makeBuffer(bytesNoCopy: particlesMemory!, length: Int(particlesMemoryByteSize), options: MTLResourceOptions(), deallocator: nil)
+        particlesBufferNoCopy = device!.makeBuffer(bytesNoCopy: particlesMemory!, length: Int(particlesMemoryByteSize), options: [], deallocator: nil)
     }
     
     required init(coder aDecoder: NSCoder)
@@ -256,9 +256,9 @@ class ParticleLab: MTKView
         var imageWidthFloat = Float(imageWidth)
         var imageHeightFloat = Float(imageHeight)
         
-        imageWidthFloatBuffer =  device.makeBuffer(bytes: &imageWidthFloat, length: MemoryLayout<Float>.size, options: MTLResourceOptions())
+        imageWidthFloatBuffer =  device.makeBuffer(bytes: &imageWidthFloat, length: MemoryLayout<Float>.size, options: [])
         
-        imageHeightFloatBuffer = device.makeBuffer(bytes: &imageHeightFloat, length: MemoryLayout<Float>.size, options: MTLResourceOptions())
+        imageHeightFloatBuffer = device.makeBuffer(bytes: &imageHeightFloat, length: MemoryLayout<Float>.size, options: [])
         
         frameStartTime = CFAbsoluteTimeGetCurrent()
     }
