@@ -20,6 +20,12 @@
 		3EE448D91B2B857E003F8471 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EE448D81B2B857E003F8471 /* Shaders.metal */; };
 		3EE448DB1B2B857E003F8471 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EE448DA1B2B857E003F8471 /* Assets.xcassets */; };
 		3EE448DE1B2B857E003F8471 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3EE448DC1B2B857E003F8471 /* MainMenu.xib */; };
+		BA8C21E91FA8DE9F00204DDD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA8C21E81FA8DE9F00204DDD /* Assets.xcassets */; };
+		BA8C21EB1FA8DE9F00204DDD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8C21EA1FA8DE9F00204DDD /* AppDelegate.swift */; };
+		BA8C21F51FA8DE9F00204DDD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA8C21F31FA8DE9F00204DDD /* Main.storyboard */; };
+		BA8C21FA1FA8DEDF00204DDD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E26C2561B3B188E00DA28C4 /* ViewController.swift */; };
+		BA8C21FB1FA8DFA300204DDD /* ParticleLab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7871891B2B86990007F15B /* ParticleLab.swift */; };
+		BA8C21FC1FA8E11C00204DDD /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3EE448D81B2B857E003F8471 /* Shaders.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +44,11 @@
 		3EE448DA1B2B857E003F8471 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3EE448DD1B2B857E003F8471 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3EE448DF1B2B857E003F8471 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BA8C21E61FA8DE9F00204DDD /* tvOSMetalParticles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tvOSMetalParticles.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA8C21E81FA8DE9F00204DDD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BA8C21EA1FA8DE9F00204DDD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		BA8C21F41FA8DE9F00204DDD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BA8C21F61FA8DE9F00204DDD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +60,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3EE448CE1B2B857E003F8471 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA8C21E31FA8DE9F00204DDD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -84,6 +102,7 @@
 			children = (
 				3EE448D31B2B857E003F8471 /* OSXMetalParticles */,
 				3E26C2531B3B188E00DA28C4 /* iOSMetalParticles */,
+				BA8C21E71FA8DE9F00204DDD /* tvOSMetalParticles */,
 				3EE448D21B2B857E003F8471 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -93,6 +112,7 @@
 			children = (
 				3EE448D11B2B857E003F8471 /* OSXMetalParticles.app */,
 				3E26C2521B3B188E00DA28C4 /* iOSMetalParticles.app */,
+				BA8C21E61FA8DE9F00204DDD /* tvOSMetalParticles.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,6 +129,17 @@
 				3EE448DF1B2B857E003F8471 /* Info.plist */,
 			);
 			path = OSXMetalParticles;
+			sourceTree = "<group>";
+		};
+		BA8C21E71FA8DE9F00204DDD /* tvOSMetalParticles */ = {
+			isa = PBXGroup;
+			children = (
+				BA8C21E81FA8DE9F00204DDD /* Assets.xcassets */,
+				BA8C21EA1FA8DE9F00204DDD /* AppDelegate.swift */,
+				BA8C21F31FA8DE9F00204DDD /* Main.storyboard */,
+				BA8C21F61FA8DE9F00204DDD /* Info.plist */,
+			);
+			path = tvOSMetalParticles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,12 +179,30 @@
 			productReference = 3EE448D11B2B857E003F8471 /* OSXMetalParticles.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BA8C21E51FA8DE9F00204DDD /* tvOSMetalParticles */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA8C21F91FA8DE9F00204DDD /* Build configuration list for PBXNativeTarget "tvOSMetalParticles" */;
+			buildPhases = (
+				BA8C21E21FA8DE9F00204DDD /* Sources */,
+				BA8C21E31FA8DE9F00204DDD /* Frameworks */,
+				BA8C21E41FA8DE9F00204DDD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = tvOSMetalParticles;
+			productName = tvOSMetalParticles;
+			productReference = BA8C21E61FA8DE9F00204DDD /* tvOSMetalParticles.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		3EE448C91B2B857E003F8471 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0900;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Simon Gladman";
 				TargetAttributes = {
@@ -163,6 +212,10 @@
 					3EE448D01B2B857E003F8471 = {
 						CreatedOnToolsVersion = 7.0;
 						LastSwiftMigration = 0830;
+					};
+					BA8C21E51FA8DE9F00204DDD = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -181,6 +234,7 @@
 			targets = (
 				3EE448D01B2B857E003F8471 /* OSXMetalParticles */,
 				3E26C2511B3B188E00DA28C4 /* iOSMetalParticles */,
+				BA8C21E51FA8DE9F00204DDD /* tvOSMetalParticles */,
 			);
 		};
 /* End PBXProject section */
@@ -202,6 +256,15 @@
 			files = (
 				3EE448DB1B2B857E003F8471 /* Assets.xcassets in Resources */,
 				3EE448DE1B2B857E003F8471 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA8C21E41FA8DE9F00204DDD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA8C21E91FA8DE9F00204DDD /* Assets.xcassets in Resources */,
+				BA8C21F51FA8DE9F00204DDD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +293,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BA8C21E21FA8DE9F00204DDD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA8C21FC1FA8E11C00204DDD /* Shaders.metal in Sources */,
+				BA8C21FA1FA8DEDF00204DDD /* ViewController.swift in Sources */,
+				BA8C21FB1FA8DFA300204DDD /* ParticleLab.swift in Sources */,
+				BA8C21EB1FA8DE9F00204DDD /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
@@ -255,6 +329,14 @@
 				3EE448DD1B2B857E003F8471 /* Base */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		BA8C21F31FA8DE9F00204DDD /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BA8C21F41FA8DE9F00204DDD /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -407,6 +489,73 @@
 			};
 			name = Release;
 		};
+		BA8C21F71FA8DE9F00204DDD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tvOSMetalParticles/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.flexmonkey.tvOSMetalParticles.tvOSMetalParticles;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		BA8C21F81FA8DE9F00204DDD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = tvOSMetalParticles/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = uk.co.flexmonkey.tvOSMetalParticles.tvOSMetalParticles;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -433,6 +582,15 @@
 			buildConfigurations = (
 				3EE448E31B2B857E003F8471 /* Debug */,
 				3EE448E41B2B857E003F8471 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BA8C21F91FA8DE9F00204DDD /* Build configuration list for PBXNativeTarget "tvOSMetalParticles" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA8C21F71FA8DE9F00204DDD /* Debug */,
+				BA8C21F81FA8DE9F00204DDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
