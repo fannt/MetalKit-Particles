@@ -20,8 +20,8 @@ class ViewController: UIViewController, ParticleLabDelegate
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
-        particleLab = ParticleLab(width: 1024, height: 768, numParticles: .fourMillion)
+        let size = view.frame
+        particleLab = ParticleLab(width: UInt(size.width), height: UInt(size.height), numParticles: .fourMillion)
         
         particleLab.dragFactor = 0.85
         particleLab.respawnOutOfBoundsParticles = true
