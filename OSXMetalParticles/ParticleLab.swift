@@ -319,7 +319,7 @@ class ParticleLab: MTKView
         
         commandBuffer.commit()
         
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background).async
+        DispatchQueue.global(qos: .background).async
         {
             self.particleLabDelegate?.particleLabDidUpdate()
         }
@@ -327,7 +327,7 @@ class ParticleLab: MTKView
     
 
     
-    final func getGravityWellNormalisedPosition(gravityWell: GravityWell) -> (x: Float, y: Float)
+    final func getGravityWellNormalisedPosition(_ gravityWell: GravityWell) -> (x: Float, y: Float)
     {
         let returnPoint: (x: Float, y: Float)
         
